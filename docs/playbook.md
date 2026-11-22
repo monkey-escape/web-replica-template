@@ -16,6 +16,8 @@ pnpm browsers
 
 `.env` 里的 `DATABASE_URL` 和 `REDIS_URL` 继续保持占位，除非这个克隆真的要接数据库。模板的 API 不会读取它们。
 
+私有仓库已经存在时，不要重新 clone 盖掉它。按根目录 `README.md` 的「下游私有仓库跟上模板」：把 `https://github.com/monkey-escape/web-replica-template.git` 加为 `upstream`，`git fetch upstream`，再 `git merge upstream/main` 或 `git rebase upstream/main`。`origin` 保持私有仓库。
+
 给站点起一个 id：小写字母、数字、单个连字符，例如 `northwind`。后文记为 `<site-id>`。
 
 ## 1. 先分析目标站

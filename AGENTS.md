@@ -19,6 +19,7 @@
 - 不要增加第二个 Cloudflare Worker，也不要在 `wrangler.jsonc` 里加 KV、R2、D1、队列、Durable Objects 或账号 id。本地账号写在 `wrangler.local.jsonc`。
 - 不要用 npm 或 yarn 安装依赖。这个仓库只用 pnpm。
 - 不要把 `temp/` 里的报告或 diff 图提交进 git。
+- 私有克隆的 `origin` 是私有仓库。本模板只作为 `upstream`（`https://github.com/monkey-escape/web-replica-template.git`）。更新用 `git fetch upstream`，然后 `git merge upstream/main` 或 `git rebase upstream/main`。不要把私有站点的提交推到这个公开仓库。
 
 ## 命令
 

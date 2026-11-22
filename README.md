@@ -28,6 +28,36 @@ pnpm browsers
 
 `.env.example` 里的 `DATABASE_URL` 和 `REDIS_URL` 是占位符。API 不会连接 Postgres 或 Redis。不要把真实密码写进仓库。
 
+仓库页的 **Use this template** 要先在 GitHub 把本仓库标成 Template repository（Settings → General）。这次用 API 设置 `is_template` 时返回 403，当前身份改不了这项设置，需要仓库主人勾一次。按钮复制的是默认分支 `main`，模板内容进入 `main` 之后，生成出来的仓库才有这套骨架。
+
+## 下游私有仓库跟上模板
+
+已有的私有克隆不要把本仓库改成自己的 `origin`。`origin` 仍是私有仓库，本仓库只作为 `upstream`。`monkey-escape/web-replica` 就是这样用的：站点内容留在私有仓库，模板更新从这里拉。
+
+在私有仓库的根目录执行一次：
+
+```bash
+git remote add upstream https://github.com/monkey-escape/web-replica-template.git
+git fetch upstream
+```
+
+`upstream` 已经存在时，不要重复添加，直接 `git fetch upstream`。
+
+拉下来之后，把 `upstream/main` 合进当前私有分支。两条都可以，按分支有没有被别人使用来选：
+
+```bash
+git merge upstream/main
+```
+
+```bash
+git rebase upstream/main
+```
+
+- 用 merge：私有分支已经推送、或有别人在上面工作时用这个。历史会保留一次合并，不需要改写远端提交。
+- 用 rebase：分支还只在本地、或只有你自己使用时用这个。模板提交会留在私有提交下面。分支如果已经在远端，rebase 之后要自己决定是否 `git push --force-with-lease`。不要对这个公开仓库的 `main` 做 force push。
+- 冲突在私有仓库里解决。不要把 `.env`、账号、目标站的私有页面或业务代码推回 `upstream`。
+- 合完或变基完，在私有仓库里跑 `pnpm install`，再按 `docs/playbook.md` 继续这个站点。不要把私有站点的提交开回本模板的 pull request，除非改的是模板方法本身。
+
 ## 命令
 
 | 命令                                           | 作用                                                           |
