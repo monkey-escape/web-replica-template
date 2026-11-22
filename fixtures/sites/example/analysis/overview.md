@@ -4,7 +4,7 @@
 
 ## Screenshots
 
-分析阶段先看整页截图，再写结构。参考图放在 `fixtures/sites/example/baselines/`，文件名跟路由名一致：`home.png`、`about.png`。原始记录放在 `analysis/screenshots/`。占位站没有外部截图，参考图由本地骨架生成。
+分析阶段先看整页截图，再写结构。参考图放在 `fixtures/sites/example/baselines/`，每个视口一份：`home.desktop.png`、`home.mobile.png`、`about.desktop.png`、`about.mobile.png`。档案必须包含桌面宽度 1440 和手机宽度 390。原始记录放在 `analysis/screenshots/`。占位站没有外部截图，参考图由本地骨架生成。标志文件在 `assets/mark.svg`，运行时地址是 `/media/example/mark.svg`。
 
 ## Structure
 

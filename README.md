@@ -24,7 +24,7 @@ cp .env.example .env
 pnpm browsers
 ```
 
-然后按 `docs/playbook.md` 做：分析目标站、核对 `docs/experience/traps.md`、在 `apps/web` 与 `apps/api` 实现、跑 parity 循环、把教训写回经验库、当天复盘。路由是 strict 还是 adapt，看 `docs/adapt.md`。给 AI 的常驻说明在 `AGENTS.md`。
+然后按 `docs/playbook.md` 做：分析目标站（含共用组件和 API mock 决定，见 `docs/api-mocks.md`）、核对 `docs/experience/traps.md`、先实现共用组件再拼页面、跑 parity 循环、把教训写回经验库、当天复盘。目标站后来改版时走 `docs/target-update.md`（先 `compare-target`，再 `--accept`，再测差值），这和把本模板当 `upstream` 做 `git fetch` 不是同一件事。路由是 strict 还是 adapt，看 `docs/adapt.md`。给 AI 的常驻说明在 `AGENTS.md`。
 
 `.env.example` 里的 `DATABASE_URL` 和 `REDIS_URL` 是占位符。API 不会连接 Postgres 或 Redis。不要把真实密码写进仓库。
 
@@ -40,7 +40,7 @@ pnpm browsers
 dsh plugin --profile <profile> add ./harness/dsh-web-replica
 ```
 
-然后启动这个 profile，在 preset 名单里选 **1:1 website replica**（id `web-replica`）。新会话才会用上刚装的 preset。这个 preset 会先读 `AGENTS.md`、`docs/playbook.md`、`docs/adapt.md`、`docs/experience/traps.md` 和已有教训，再分析 `fixtures/sites/<site-id>/`，用 `node scripts/clone-loop.mjs --site <site-id>` 测到 strict 路由 1:1，绿了写教训，当天用 `node scripts/recap-daily.mjs` 复盘。
+然后启动这个 profile，在 preset 名单里选 **1:1 website replica**（id `web-replica`）。新会话才会用上刚装的 preset。这个 preset 只有这一项，不会另起一套方法：persona 写明阶段顺序和硬约束，skills 给出命令，`replica_check_gates` / `replica_capture_sections` / `replica_capture_api` / `replica_compare_target` / `replica_clone_loop` 是同一批仓库脚本的官方工具包装。仍可用 bash / fs / web 直接跑这些脚本。顺序是：先分析（共用组件、API mock、媒体和样式）并通过 `check-gates`，先实现共用组件再拼页面，再用 `clone-loop` 只修 `report.next`，绿了写教训，当天用 `node scripts/recap-daily.mjs` 复盘。目标站改版走 `docs/target-update.md`。详见 `harness/dsh-web-replica/README.md`。
 
 `engines.dsh` 写成 `>=0.2.3-alpha.1 <0.3.0`，对齐写这份组合包时的 Harness `0.2.3-alpha.1`。子插件（persona、文件、shell、skill）由正在运行的 `dsh` 解析，不写进本仓库的依赖。
 
@@ -76,16 +76,17 @@ git rebase upstream/main
 
 | 命令                                           | 作用                                                           |
 | ---------------------------------------------- | -------------------------------------------------------------- |
-| `pnpm dev:web`                                 | Vite+ 开发服务器，`http://127.0.0.1:5173`                      |
-| `pnpm dev:api`                                 | 先打包 `@replica/shared`，再启动 Hono，`http://127.0.0.1:3000` |
+| `pnpm dev:web`                                 | Vite+ 开发服务器，`http://127.0.0.1:5173`，代理 `/api` 和 `/media` |
+| `pnpm dev:api`                                 | 先打包 `@replica/shared`，再启动 Hono，`http://127.0.0.1:3000`；本地 `/media` 从 fixtures 提供 |
 | `pnpm build`                                   | 打包共享库、API 和前端                                         |
 | `pnpm test`                                    | 比较函数、门禁和两个脚本的自检，不需要浏览器                   |
 | `pnpm browsers`                                | 安装 Playwright 的 Chromium                                    |
 | `pnpm check`                                   | Vite+ 的格式、lint 和类型检查                                  |
-| `node scripts/clone-loop.mjs --site <site-id>` | 分析门禁、测量、视觉比较；只报告失败路由                       |
+| `node scripts/capture-assets.mjs --site <site-id>` | 按 manifest 把公开资源下到 `fixtures/sites/<site-id>/assets/` |
+| `node scripts/clone-loop.mjs --site <site-id>` | Oracle 循环：测量、区块打分、可维护性；只指出下一刀。见 `docs/oracle.md` |
 | `node scripts/recap-daily.mjs`                 | 用当天提交和完整日志写 `docs/recap/`                           |
 
-测量 example 骨架前，需要两个开发服务器，以及按 `fixtures/sites/example/analysis/screenshots/README.md` 在本机生成参考图。参考图依赖系统字体，所以不提交。
+测量 example 骨架前，需要两个开发服务器，以及按 `fixtures/sites/example/analysis/screenshots/README.md` 在本机生成桌面 1440 和手机 390 的参考图。参考图依赖系统字体，所以不提交。静态资源走 `/media/<site-id>/<key>`，见 `docs/media.md`。
 
 Cloudflare 只有根目录 `wrangler.jsonc` 里的一个 Worker，入口是 `apps/api/src/worker.ts`。本地账号、路由和其他部署差异放在被忽略的 `wrangler.local.jsonc` 或 `deploy.local.jsonc`。
 
@@ -99,10 +100,15 @@ packages/parity          测量、视觉比较、门禁、复盘的实现
 tests/parity             measure.mjs、visual.mjs、路由档案
 fixtures/sites/example   占位分析，不是外部网站
 docs/playbook.md         六步流程
+docs/oracle.md           循环裁定、完成态和残差
+.agents/notes            产品决策（AGENTS.md 保持短）
+docs/media.md            本地 /media 服务与之后换到 R2 的约定
 docs/adapt.md            strict 与 adapt
 docs/experience          陷阱库和教训
 docs/recap               每日复盘的说明和生成结果
 scripts/clone-loop.mjs   克隆循环
+scripts/capture-assets.mjs  按 manifest 下载公开资源
+scripts/capture-sections.mjs 从目标站（`--from-target`）或克隆记录区块与计算样式
 scripts/recap-daily.mjs  每日复盘
 temp/                    gitignore，循环报告和 diff
 ```

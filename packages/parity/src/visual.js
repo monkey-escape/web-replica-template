@@ -20,9 +20,12 @@ export function comparePng(actualImage, expectedImage, options = {}) {
       expected: { width: expectedImage.width, height: expectedImage.height },
       mismatched: null,
       ratio: 1,
+      exactMismatched: null,
+      exactRatio: 1,
     }
   }
 
+  const area = actualImage.width * actualImage.height
   const diff = new PNG({ width: actualImage.width, height: actualImage.height })
   const mismatched = pixelmatch(
     actualImage.data,
@@ -32,13 +35,28 @@ export function comparePng(actualImage, expectedImage, options = {}) {
     actualImage.height,
     { threshold: pixelThreshold },
   )
-  const ratio = mismatched / (actualImage.width * actualImage.height)
+  const ratio = mismatched / area
+  let exactMismatched = mismatched
+  if (pixelThreshold !== 0) {
+    const exactDiff = new PNG({ width: actualImage.width, height: actualImage.height })
+    exactMismatched = pixelmatch(
+      actualImage.data,
+      expectedImage.data,
+      exactDiff.data,
+      actualImage.width,
+      actualImage.height,
+      { threshold: 0 },
+    )
+  }
+  const exactRatio = exactMismatched / area
 
   return {
     pass: ratio <= maxDiffRatio,
     reason: ratio <= maxDiffRatio ? 'match' : 'pixel-diff',
     mismatched,
     ratio,
+    exactMismatched,
+    exactRatio,
     width: actualImage.width,
     height: actualImage.height,
     diff,
@@ -55,13 +73,14 @@ export function comparePngFiles(actualPath, expectedPath, options = {}) {
   return publicResult
 }
 
-export function baselinePath(profile, route, root = repoRoot) {
+export function baselinePath(profile, route, viewport, root = repoRoot) {
   const dir = profile.baselines ?? `fixtures/sites/${profile.siteId}/baselines`
-  return resolve(root, dir, `${route.name}.png`)
+  const name = viewport?.name ? `${route.name}.${viewport.name}.png` : `${route.name}.png`
+  return resolve(root, dir, name)
 }
 
-export function baselineExists(profile, route, root = repoRoot) {
-  return existsSync(baselinePath(profile, route, root))
+export function baselineExists(profile, route, viewport, root = repoRoot) {
+  return existsSync(baselinePath(profile, route, viewport, root))
 }
 
 export function maxDiffRatioFor(route, profile) {

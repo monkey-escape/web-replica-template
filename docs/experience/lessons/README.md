@@ -21,3 +21,10 @@ node scripts/clone-loop.mjs --site <site-id> --write-lesson --slug <slug>
 ## 现在还没有笔记
 
 陷阱库因此也是空的。第一篇笔记应该来自下一个真实克隆，而不是来自 example 占位站。
+
+写好并改成可复用、不含业务数据的条目之后，用实现仓库里的命令提回公开模板，不要把站点 fixtures 或参考图一并推上去：
+
+```bash
+node scripts/promote-experience.mjs
+node scripts/promote-experience.mjs --pr
+```
