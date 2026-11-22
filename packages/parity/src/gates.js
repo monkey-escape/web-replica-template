@@ -22,14 +22,28 @@ function trapSection(markdown) {
 }
 
 export function activeTrapIds(markdown) {
+  const section = trapSection(markdown)
   const ids = []
-  const blocks = trapSection(markdown).matchAll(/```ya?ml\n([\s\S]*?)```/g)
-  for (const block of blocks) {
-    const body = block[1]
-    const id = body.match(/^id:\s*(\S+)\s*$/m)?.[1]
-    const status = body.match(/^status:\s*(\S+)\s*$/m)?.[1]
-    if (id && status === 'active') ids.push(id)
+  const seen = new Set()
+
+  const add = (id, status) => {
+    if (id && status === 'active' && !seen.has(id)) {
+      seen.add(id)
+      ids.push(id)
+    }
   }
+
+  for (const block of section.matchAll(/```ya?ml\n([\s\S]*?)```/g)) {
+    const body = block[1]
+    add(body.match(/^id:\s*(\S+)\s*$/m)?.[1], body.match(/^status:\s*(\S+)\s*$/m)?.[1])
+  }
+
+  // promote-experience writes unfenced id: blocks under Active traps.
+  for (const part of section.trim().split(/^(?=id:\s*trap-\d+)/m)) {
+    const text = part.trim()
+    add(text.match(/^id:\s*(trap-\d+)/)?.[1], text.match(/^status:\s*(\S+)\s*$/m)?.[1])
+  }
+
   return ids
 }
 
