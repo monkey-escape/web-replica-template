@@ -73,6 +73,28 @@ test('active trap ids ignore retired entries', () => {
   assert.equal(nextTrapId('# empty'), 'trap-0001')
 })
 
+test('active trap ids also read unfenced blocks under Active traps', () => {
+  const markdown = `# 陷阱库
+
+\`\`\`yaml
+id: trap-NNNN
+status: active
+\`\`\`
+
+## Active traps
+
+id: trap-0004
+status: active
+surfaces: [screenshot]
+
+id: trap-0005
+status: retired
+surfaces: [visual]
+`
+  assert.deepEqual(activeTrapIds(markdown), ['trap-0004'])
+})
+
+
 test('the example fixture clears the gates', () => {
   const result = checkGates('example', repoRoot)
   assert.deepEqual(result.errors, [], result.errors.join('\n'))
