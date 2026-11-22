@@ -1,0 +1,27 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# esbuild 是 Vite+ 的传递依赖，workerd 是这一个 Worker 的本地运行时。只允许这两个安装脚本。
+allowBuilds:
+  esbuild: true
+  workerd: true
+
+# Vite+ 要求把 vite 指到配套 core，并把 vitest 钉死，避免仓库里出现两套 runner。
+# 版本来自 vite-plus@1.7.0 的依赖：vite -> @voidzero-dev/vite-plus-core@8.3.8000，vitest 5.1.0。
+overrides:
+  'vite@*': 'npm:@voidzero-dev/vite-plus-core@8.3.8000'
+  'vitest@*': '5.1.0'
+
+catalog:
+  vite-plus: '1.7.0'
+  vitest: '5.1.0'
+  typescript: '7.0.2'
+  hono: '4.13.20'
+  '@hono/node-server': '2.1.11'
+  tsx: '4.23.15'
+  '@types/node': '26.6.6'
+  wrangler: '4.166.0'
+  playwright: '1.65.1'
+  pixelmatch: '8.0.0'
+  pngjs: '7.0.0'

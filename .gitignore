@@ -1,0 +1,24 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# 本地环境与密钥。示例文件必须留在仓库里。
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# 本地部署配置（账号、路由、证书）。根目录 wrangler.jsonc 是唯一允许提交的 Worker 配置。
+.wrangler/
+wrangler.local.jsonc
+deploy.local.jsonc
+
+# 循环产物、日志、截图 diff。不要把某一轮的失败现场提交进模板。
+temp/
+
+*.log
+playwright-report/
+test-results/
+coverage/
+
+.DS_Store

@@ -1,0 +1,26 @@
+{
+  "name": "@replica/parity",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./args": "./src/args.js",
+    "./browser": "./src/browser.js",
+    "./gates": "./src/gates.js",
+    "./measure": "./src/measure.js",
+    "./paths": "./src/paths.js",
+    "./profile": "./src/profile.js",
+    "./recap": "./src/recap.js",
+    "./report": "./src/report.js",
+    "./shoot": "./src/shoot.js",
+    "./rot": "./src/rot.js",
+    "./structure": "./src/structure.js",
+    "./visual": "./src/visual.js"
+  },
+  "dependencies": {
+    "pixelmatch": "catalog:",
+    "playwright": "catalog:",
+    "pngjs": "catalog:"
+  }
+}

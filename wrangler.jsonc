@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "web-replica-template",
+  "main": "apps/api/src/worker.ts",
+  "compatibility_date": "2026-11-22",
+  // 整个仓库只保留这一个 Worker。
+  // 不要在这里添加 KV、R2、D1、Durable Objects、Queues、service bindings、Hyperdrive 或账号 id。
+  // Postgres / Redis 只存在于 .env.example，不做成 Cloudflare 绑定。
+  "workers_dev": true,
+}
