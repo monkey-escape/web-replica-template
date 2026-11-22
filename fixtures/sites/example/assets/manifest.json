@@ -1,0 +1,10 @@
+{
+  "siteId": "example",
+  "items": [
+    {
+      "key": "mark.svg",
+      "source": "local",
+      "note": "Template mark. Not copied from an external site."
+    }
+  ]
+}

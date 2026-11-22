@@ -6,5 +6,7 @@
   // 整个仓库只保留这一个 Worker。
   // 不要在这里添加 KV、R2、D1、Durable Objects、Queues、service bindings、Hyperdrive 或账号 id。
   // Postgres / Redis 只存在于 .env.example，不做成 Cloudflare 绑定。
+  // 本地开发时 /media/<site-id>/<key> 由 Node API 从 fixtures/sites/<site-id>/assets/ 提供。
+  // 生产环境把同一前缀换到 R2，对象键保持不变。bucket 名、账号 id 和密钥只写在 wrangler.local.jsonc。
   "workers_dev": true,
 }

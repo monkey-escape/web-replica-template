@@ -49,7 +49,7 @@ if (failed.length === 0) {
 
 console.error(`measure failed ${failed.length} route(s). Fix only these:`)
 for (const item of failed) {
-  console.error(`- [${item.mode}] ${item.route} ${item.path}`)
+  console.error(`- [${item.mode}] ${item.route}${item.viewport ? '@' + item.viewport : ''} ${item.path}`)
   for (const failure of item.failures)
     console.error(`    ${failure.kind} ${failure.key}: ${failure.item}`)
 }

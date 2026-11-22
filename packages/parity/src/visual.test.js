@@ -33,3 +33,21 @@ test('different sizes fail closed', () => {
   assert.equal(result.pass, false)
   assert.equal(result.reason, 'size-mismatch')
 })
+
+test('a perceptually passing compare still records an exact-pixel residual', () => {
+  const expected = solid(2, 2, [10, 20, 30, 255])
+  const actual = solid(2, 2, [14, 20, 30, 255])
+  const result = comparePng(actual, expected, { pixelThreshold: 0.1, maxDiffRatio: 0 })
+  assert.equal(result.pass, true)
+  assert.equal(result.mismatched, 0)
+  assert.ok(result.exactMismatched > 0)
+  assert.ok(result.exactRatio > 0)
+})
+
+test('size mismatch also reports an exact residual of 1', () => {
+  const result = comparePng(solid(2, 2, [0, 0, 0, 255]), solid(3, 2, [0, 0, 0, 255]), {
+    maxDiffRatio: 1,
+  })
+  assert.equal(result.exactMismatched, null)
+  assert.equal(result.exactRatio, 1)
+})

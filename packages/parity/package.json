@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.js",
     "./args": "./src/args.js",
+    "./api-capture": "./src/api-capture.js",
     "./browser": "./src/browser.js",
     "./gates": "./src/gates.js",
     "./measure": "./src/measure.js",
@@ -16,7 +17,17 @@
     "./shoot": "./src/shoot.js",
     "./rot": "./src/rot.js",
     "./structure": "./src/structure.js",
-    "./visual": "./src/visual.js"
+    "./visual": "./src/visual.js",
+    "./maintain": "./src/maintain.js",
+    "./sections": "./src/sections.js",
+    "./blame": "./src/blame.js",
+    "./styles": "./src/styles.js",
+    "./capture": "./src/capture.js",
+    "./target-update": "./src/target-update.js",
+    "./oracle": "./src/oracle.js",
+    "./schedule": "./src/schedule.js",
+    "./mock-health": "./src/mock-health.js",
+    "./promote-experience": "./src/promote-experience.js"
   },
   "dependencies": {
     "pixelmatch": "catalog:",

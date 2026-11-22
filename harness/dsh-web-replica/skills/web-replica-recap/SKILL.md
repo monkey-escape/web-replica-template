@@ -5,13 +5,13 @@ description: Use at the end of a clone day. Writes the daily recap from complete
 
 # Daily recap
 
-Run:
+Canonical docs: `docs/recap/README.md`, `docs/playbook.md`.
 
 ```bash
 node scripts/recap-daily.mjs
 ```
 
-It writes `docs/recap/YYYY-MM-DD.md` from complete loop logs and the day's commits. Read `docs/recap/README.md` before changing that behavior.
+It writes `docs/recap/YYYY-MM-DD.md` from complete loop logs and the day's commits.
 
 Cleanup is separate:
 

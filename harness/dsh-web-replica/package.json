@@ -6,6 +6,8 @@
   "license": "MIT",
   "files": [
     "index.js",
+    "tools.js",
+    "tools-lib.js",
     "cordis.patch.yml",
     "skills"
   ],
@@ -13,11 +15,15 @@
   "main": "index.js",
   "exports": {
     ".": "./index.js",
+    "./tools": "./tools.js",
     "./package.json": "./package.json"
   },
   "engines": {
     "dsh": ">=0.2.3-alpha.1 <0.3.0",
     "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": ">=0.2.3-alpha.1 <0.3.0"
   },
   "dsh": {
     "bundle": {

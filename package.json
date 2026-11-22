@@ -11,9 +11,10 @@
     "check": "vp check",
     "lint": "vp lint",
     "fmt": "vp fmt",
-    "test": "node --test packages/parity/src/*.test.js harness/dsh-web-replica/bundle.test.js && node scripts/clone-loop.mjs --self-test && node scripts/recap-daily.mjs --self-test",
+    "test": "node --test packages/parity/src/*.test.js harness/dsh-web-replica/*.test.js && pnpm --filter @replica/api exec tsx --test src/media.test.ts src/api-mocks.test.ts && node scripts/capture-assets.mjs --self-test && node scripts/capture-api.mjs --self-test && node scripts/capture-sections.mjs --self-test && node scripts/check-gates.mjs --self-test && node scripts/compare-target.mjs --self-test && node scripts/clone-loop.mjs --self-test && node scripts/promote-experience.mjs --self-test && node scripts/recap-daily.mjs --self-test",
     "parity": "node scripts/clone-loop.mjs",
     "recap": "node scripts/recap-daily.mjs",
+    "promote-experience": "node scripts/promote-experience.mjs",
     "browsers": "pnpm --filter @replica/parity exec playwright install chromium",
     "start:api": "pnpm --filter @replica/api start"
   },
