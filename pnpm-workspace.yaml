@@ -1,6 +1,7 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+  - 'harness/*'
 
 # esbuild 是 Vite+ 的传递依赖，workerd 是这一个 Worker 的本地运行时。只允许这两个安装脚本。
 allowBuilds:

@@ -30,6 +30,20 @@ pnpm browsers
 
 仓库页的 **Use this template** 要先在 GitHub 把本仓库标成 Template repository（Settings → General）。这次用 API 设置 `is_template` 时返回 403，当前身份改不了这项设置，需要仓库主人勾一次。按钮复制的是默认分支 `main`，模板内容进入 `main` 之后，生成出来的仓库才有这套骨架。
 
+## 用 DeepSeek Harness 开一轮克隆
+
+组合包在 `harness/dsh-web-replica/`。它按 [Harness 的 bundle 格式](https://github.com/deepseek-ai/deepseek-harness/blob/d98f5d68519215da48f3002da2cb9c9d2068d81d/docs/user/develop/basic/publish.md) 发布：`package.json` 的 `dsh.bundle.patch` 指向 `cordis.patch.yml`。preset 行使用已安装的 `@deepseek-ai/dsh-agent-preset`，这个仓库不内置、也不 fork Harness。
+
+在已经装好 `dsh` 的机器上，从本仓库根目录把组合包加进一个 profile：
+
+```bash
+dsh plugin --profile <profile> add ./harness/dsh-web-replica
+```
+
+然后启动这个 profile，在 preset 名单里选 **1:1 website replica**（id `web-replica`）。新会话才会用上刚装的 preset。这个 preset 会先读 `AGENTS.md`、`docs/playbook.md`、`docs/adapt.md`、`docs/experience/traps.md` 和已有教训，再分析 `fixtures/sites/<site-id>/`，用 `node scripts/clone-loop.mjs --site <site-id>` 测到 strict 路由 1:1，绿了写教训，当天用 `node scripts/recap-daily.mjs` 复盘。
+
+`engines.dsh` 写成 `>=0.2.3-alpha.1 <0.3.0`，对齐写这份组合包时的 Harness `0.2.3-alpha.1`。子插件（persona、文件、shell、skill）由正在运行的 `dsh` 解析，不写进本仓库的依赖。
+
 ## 下游私有仓库跟上模板
 
 已有的私有克隆不要把本仓库改成自己的 `origin`。`origin` 仍是私有仓库，本仓库只作为 `upstream`。`monkey-escape/web-replica` 就是这样用的：站点内容留在私有仓库，模板更新从这里拉。

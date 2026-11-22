@@ -20,6 +20,7 @@
 - 不要用 npm 或 yarn 安装依赖。这个仓库只用 pnpm。
 - 不要把 `temp/` 里的报告或 diff 图提交进 git。
 - 私有克隆的 `origin` 是私有仓库。本模板只作为 `upstream`（`https://github.com/monkey-escape/web-replica-template.git`）。更新用 `git fetch upstream`，然后 `git merge upstream/main` 或 `git rebase upstream/main`。不要把私有站点的提交推到这个公开仓库。
+- 用 DeepSeek Harness 时，把 `harness/dsh-web-replica` 加进 profile：`dsh plugin --profile <profile> add ./harness/dsh-web-replica`，然后选 preset **1:1 website replica**（id `web-replica`）。skills 只指向本仓库的 playbook，不要在 Harness 里另写一套方法，也不要复制 Harness 仓库。
 
 ## 命令
 

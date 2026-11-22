@@ -1,0 +1,27 @@
+{
+  "name": "dsh-web-replica",
+  "version": "0.0.0",
+  "private": true,
+  "description": "DeepSeek Harness bundle: a 1:1 website replica agent preset for this template.",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "skills"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "dsh": ">=0.2.3-alpha.1 <0.3.0",
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
