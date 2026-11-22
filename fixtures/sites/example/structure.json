@@ -1,0 +1,14 @@
+{
+  "home": {
+    "landmarks": ["header", "nav", "main", "footer"],
+    "headings": ["Replica template"],
+    "components": ["site-header", "hero", "api-status", "site-footer"],
+    "interactions": ["ping-api"]
+  },
+  "about": {
+    "landmarks": ["header", "nav", "main", "footer"],
+    "headings": ["About this template"],
+    "components": ["site-header", "site-footer"],
+    "interactions": ["back-home"]
+  }
+}

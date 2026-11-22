@@ -1,0 +1,31 @@
+{
+  "name": "web-replica-template",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm dev:web",
+    "dev:web": "vp -C apps/web dev",
+    "dev:api": "pnpm --filter @replica/shared build && pnpm --filter @replica/api dev",
+    "build": "pnpm --filter @replica/shared build && pnpm --filter @replica/api build && vp -C apps/web build",
+    "check": "vp check",
+    "lint": "vp lint",
+    "fmt": "vp fmt",
+    "test": "node --test packages/parity/src/*.test.js && node scripts/clone-loop.mjs --self-test && node scripts/recap-daily.mjs --self-test",
+    "parity": "node scripts/clone-loop.mjs",
+    "recap": "node scripts/recap-daily.mjs",
+    "browsers": "pnpm --filter @replica/parity exec playwright install chromium",
+    "start:api": "pnpm --filter @replica/api start"
+  },
+  "devDependencies": {
+    "@replica/parity": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:",
+    "wrangler": "catalog:"
+  },
+  "engines": {
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "packageManager": "pnpm@10.33.4"
+}

@@ -1,0 +1,35 @@
+{
+  "siteId": "example",
+  "baseUrl": "http://127.0.0.1:5173",
+  "viewport": { "width": 1280, "height": 720 },
+  "structure": "fixtures/sites/example/structure.json",
+  "baselines": "fixtures/sites/example/baselines",
+  "visual": {
+    "pixelThreshold": 0.1,
+    "strictMaxDiffRatio": 0,
+    "adaptMaxDiffRatio": 0.02
+  },
+  "routes": [
+    {
+      "name": "home",
+      "path": "/",
+      "mode": "strict",
+      "structureKey": "home",
+      "checks": [
+        {
+          "name": "ping-api",
+          "action": "click",
+          "selector": "[data-interaction='ping-api']",
+          "expectText": { "selector": "#api-status", "includes": "API ok" }
+        }
+      ]
+    },
+    {
+      "name": "about",
+      "path": "/about/",
+      "mode": "adapt",
+      "structureKey": "about",
+      "accepted": [{ "kind": "extra", "key": "components", "item": "template-notice" }]
+    }
+  ]
+}
