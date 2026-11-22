@@ -11,7 +11,7 @@
     "check": "vp check",
     "lint": "vp lint",
     "fmt": "vp fmt",
-    "test": "node --test packages/parity/src/*.test.js && node scripts/clone-loop.mjs --self-test && node scripts/recap-daily.mjs --self-test",
+    "test": "node --test packages/parity/src/*.test.js harness/dsh-web-replica/bundle.test.js && node scripts/clone-loop.mjs --self-test && node scripts/recap-daily.mjs --self-test",
     "parity": "node scripts/clone-loop.mjs",
     "recap": "node scripts/recap-daily.mjs",
     "browsers": "pnpm --filter @replica/parity exec playwright install chromium",

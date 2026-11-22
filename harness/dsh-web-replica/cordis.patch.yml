@@ -1,0 +1,66 @@
+# 1:1 website replica preset.
+# Shape follows packages/bundle/web-app/presets/standard.patch.yml in
+# deepseek-ai/deepseek-harness @ 0.2.3-alpha.1 (d98f5d6): one inserted
+# @deepseek-ai/dsh-agent-preset row. Child plugin configs that are copied
+# from that file stay as published there. This preset does not replace
+# preset-standard.
+- insert:
+    - id: web-replica
+      name: dsh-web-replica
+    - id: preset-web-replica
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: web-replica
+        name: 1:1 website replica
+        description: Clone one website into this Vite+ and Hono repo until strict routes are 1:1.
+        order: 20
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                You are a coding agent powered by the {{model}} model, working in 1:1 website replica mode.
+
+                This session clones one website into the current repository. The method already lives in the repo. Do not invent a second toolchain.
+
+                Before editing apps, read, in order: AGENTS.md, docs/playbook.md, docs/adapt.md, docs/experience/traps.md, and docs/experience/lessons/. Then load web-replica-analyze, web-replica-experience, web-replica-parity, and web-replica-recap as each step starts. Those skills only point at the playbook. The playbook stays the source of the method.
+
+                The stack stays Vite+ for apps/web and Hono for apps/api. Cloudflare stays limited to the one Worker already declared in wrangler.jsonc. Do not add KV, R2, D1, queues, Durable Objects, or an account id. Do not read or write secrets, credentials, cookies, or real database URLs.
+
+                Analyze the target into fixtures/sites/<site-id>/ before editing apps. Run `node scripts/clone-loop.mjs --site <site-id>` until every strict route is 1:1. After a green loop, write a lesson. Recap with `node scripts/recap-daily.mjs`.
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+          - id: time-context
+            name: '@deepseek-ai/dsh-time-context'
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+            config:
+              applyPatch: false
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+            config:
+              customSkillDirs:
+                - !!js process.getBuiltinModule('node:path').join(process.getBuiltinModule('node:path').dirname(process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('dsh-web-replica/package.json')), 'skills')
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 60000
